@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Media-Pro | Downloader de Vídeos e Músicas</title>
+    <!-- Font Awesome 6 (ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google Fonts: Poppins & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0a0f1e 0%, #0f172a 50%, #1a1a2e 100%);
+            min-height: 100vh;
+            color: #e2e8f0;
+        }
+
+        /* Container principal */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header / Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #f97316, #dc2626);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.3);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff, #f97316);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover {
+            color: #f97316;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(249, 115, 22, 0.15);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 100px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #f97316;
+            margin-bottom: 24px;
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, #94a3b8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+
+        .badge-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 48px;
+        }
+
+        .badge {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 40px;
+            padding: 6px 16px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(4px);
+        }
+
+        /* Card de Download */
+        .download-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 48px;
+            margin: 40px 0;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .version-tag {
+            display: inline-block;
+            background: #22c55e;
+            color: #0a0f1e;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .download-card h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .download-card p {
+            color: #94a3b8;
+            margin-bottom: 32px;
+        }
+
+        .btn-download {
+            background: linear-gradient(95deg, #f97316, #dc2626);
+            border: none;
+            padding: 16px 48px;
+            border-radius: 60px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 8px 20px rgba(249, 115, 22, 0.4);
+            text-decoration: none;
+        }
+
+        .btn-download:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 28px rgba(249, 115, 22, 0.5);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            color: white;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            margin-left: 16px;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        /* Features Grid */
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 60px 0 40px;
+            position: relative;
+        }
+
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, #f97316, #dc2626);
+            margin: 16px auto 0;
+            border-radius: 4px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(249, 115, 22, 0.3);
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(220, 38, 38, 0.2));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            color: #f97316;
+        }
+
+        .feature-card h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+        }
+
+        .feature-card p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Como usar */
+        .howto-section {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 32px;
+            padding: 48px;
+            margin: 60px 0;
+            border-radius: 32px;
+        }
+
+        .howto-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 30px;
+            margin-top: 32px;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #f97316, #dc2626);
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin: 0 auto 16px;
+        }
+
+        .step h5 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: white;
+        }
+
+        .step p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+        }
+
+        /* FAQ */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 24px;
+        }
+
+        .faq-item h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .faq-item h4 i {
+            color: #f97316;
+        }
+
+        .faq-item p {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 40px 0;
+            margin-top: 60px;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        .footer a {
+            color: #cbd5e1;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            color: #f97316;
+        }
+
+        /* Modal de Download */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border-radius: 32px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            animation: fadeInUp 0.3s ease;
+        }
+
+        .modal-content h3 {
+            font-size: 1.8rem;
+            margin-bottom: 16px;
+        }
+
+        .modal-content p {
+            color: #94a3b8;
+            margin-bottom: 24px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-modal {
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .btn-modal-primary {
+            background: linear-gradient(95deg, #f97316, #dc2626);
+            color: white;
+        }
+
+        .btn-modal-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero h2 {
+                font-size: 2.2rem;
+            }
+            .download-card {
+                padding: 32px 24px;
+            }
+            .download-card h3 {
+                font-size: 1.5rem;
+            }
+            .btn-download {
+                padding: 12px 32px;
+                font-size: 1rem;
+            }
+            .navbar {
+                flex-direction: column;
+            }
+            .howto-section {
+                padding: 32px 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-download"></i>
+            </div>
+            <h1>Media-Pro</h1>
+        </div>
+        <div class="nav-links">
+            <a href="#features">Recursos</a>
+            <a href="#howto">Como usar</a>
+            <a href="#faq">FAQ</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">
+            <i class="fas fa-bolt"></i> Downloader Rápido e Grátis
+        </div>
+        <h2>Baixe vídeos e músicas<br>de qualquer plataforma</h2>
+        <p>Media-Pro é a ferramenta definitiva para download de vídeos e áudios. Suporta Apenas Youtube.</p>
+        <div class="badge-container">
+            <div class="badge"><i class="fab fa-youtube"></i> YouTube</div>
+        </div>
+    </section>
+
+    <!-- Download Card -->
+    <div class="download-card">
+        <div class="version-tag">
+            <i class="fas fa-gem"></i> Versão 1.0
+        </div>
+        <h3><i class="fas fa-download"></i> Baixe o Media-Pro agora</h3>
+        <p>Totalmente gratuito • Sem anúncios • Sem vírus • Instalação simples</p>
+        <div>
+            <button class="btn-download" id="downloadBtn">
+                <i class="fas fa-arrow-down"></i> Baixar para Windows
+            </button>
+            <!-- Removida tag </a> solta -->
+        </div>
+        <p style="margin-top: 24px; font-size: 0.75rem; opacity: 0.7;">
+            <i class="fas fa-shield-alt"></i> Compatível com Windows 10/11 | 300 MB
+        </p>
+    </div>
+
+    <!-- Features Section -->
+    <div id="features">
+        <h2 class="section-title">Recursos incríveis</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-rocket"></i></div>
+                <h4>Velocidade extrema</h4>
+                <p>Download em alta velocidade com suporte a múltiplas conexões simultâneas.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-video"></i></div>
+                <h4>Qualidade máxima</h4>
+                <p>Baixe em 4K, 8K, 60fps, mantendo a qualidade original do vídeo.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-headphones"></i></div>
+                <h4>Áudio em MP3</h4>
+                <p>Converta qualquer vídeo para MP3 ou outros formatos de áudio.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-list-ul"></i></div>
+                <h4>Download em lote</h4>
+                <p>Baixe playlists inteiras e múltiplos vídeos de uma só vez.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-terminal"></i></div>
+                <h4>Interface CLI</h4>
+                <p>Versão para linha de comando, ideal para automatizar tarefas.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon"><i class="fas fa-shield-virus"></i></div>
+                <h4>100% seguro</h4>
+                <p>Código aberto, verificado e sem malware. Sua privacidade em primeiro lugar.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- How to Use -->
+    <div id="howto" class="howto-section">
+        <h2 class="section-title" style="margin-top: 0;">Como usar</h2>
+        <div class="howto-steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h5>Baixe e instale</h5>
+                <p>Clique no botão de download e execute o instalador.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h5>Cole o link</h5>
+                <p>Copie a URL do vídeo que deseja baixar.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h5>Escolha o formato</h5>
+                <p>Selecione MP4, MP3 ou outros formatos disponíveis.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <h5>Baixar!</h5>
+                <p>Clique em download e pronto! Seu arquivo salvo automaticamente.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- FAQ -->
+    <div id="faq">
+        <h2 class="section-title">Perguntas frequentes</h2>
+        <div class="faq-grid">
+            <div class="faq-item">
+                <h4><i class="fas fa-question-circle"></i> O Media-Pro é gratuito?</h4>
+                <p>Sim! Media-Pro é completamente gratuito, sem limites de downloads ou assinaturas premium.</p>
+            </div>
+            <div class="faq-item">
+                <h4><i class="fas fa-windows"></i> Quais sistemas operacionais são suportados?</h4>
+                <p>Atualmente, Windows 10 e 11. Em breve para macOS e Linux.</p>
+            </div>
+            <div class="faq-item">
+                <h4><i class="fas fa-download"></i> Posso baixar playlists inteiras?</h4>
+                <p>Sim! Cole o link da playlist e o Media-Pro baixará todos os vídeos automaticamente.</p>
+            </div>
+            <div class="faq-item">
+                <h4><i class="fas fa-lock"></i> O software contém vírus ou malware?</h4>
+                <p>Não. O Media-Pro é completamente seguro e verificado regularmente.</p>
+            </div>
+            <div class="faq-item">
+                <h4><i class="fas fa-sync-alt"></i> Como atualizar para a versão mais recente?</h4>
+                <p>O Media-Pro verifica automaticamente por atualizações ao iniciar.</p>
+            </div>
+            <div class="faq-item">
+                <h4><i class="fas fa-code-branch"></i> O código é aberto?</h4>
+                <p>Sim! O Media-Pro é open-source. Confira no nosso GitHub.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2026 Media-Pro - Desenvolvido por PC0800 • <a href="#">Política de Privacidade</a> • <a href="#">GitHub</a> • <a href="#">Contato</a></p>
+        <p style="margin-top: 12px;">Media-Pro não é afiliado ao YouTube, TikTok, Instagram ou qualquer outra plataforma.</p>
+    </footer>
+</div>
+
+<!-- Modal de Download -->
+<div id="downloadModal" class="modal">
+    <div class="modal-content">
+        <i class="fas fa-download" style="font-size: 3rem; color: #f97316; margin-bottom: 16px;"></i>
+        <h3>Download do Media-Pro</h3>
+        <p>Clique no botão abaixo para baixar o instalador do Media-Pro para Windows.</p>
+        <div class="modal-buttons">
+            <a href="#" id="confirmDownload" class="btn-modal btn-modal-primary" style="text-decoration: none;">
+                <i class="fas fa-arrow-down"></i> Baixar agora
+            </a>
+            <button class="btn-modal btn-modal-secondary" id="closeModal">
+                <i class="fas fa-times"></i> Fechar
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 🔻 COLOQUE A URL REAL DO SEU INSTALADOR AQUI 🔻
+    // Exemplo com GitHub Releases:
+    // const DOWNLOAD_URL = "https://github.com/seu-usuario/Media-Pro/releases/download/v1.0/MEDIA-PRO_Setup.exe";
+    // Ou, se o arquivo estiver na mesma pasta do site:
+    // const DOWNLOAD_URL = "MEDIA-PRO_Setup.exe";
+    const DOWNLOAD_URL = "https://github.com/PC0800/Media-Pro/releases/download/v1.0/MEDIA-PRO_Setup.exe"; // <--- SUBSTITUA PELO LINK REAL
+    
+    // Elementos
+    const downloadBtn = document.getElementById('downloadBtn');
+    const modal = document.getElementById('downloadModal');
+    const confirmDownload = document.getElementById('confirmDownload');
+    const closeModal = document.getElementById('closeModal');
+    const otherVersionsBtn = document.getElementById('otherVersionsBtn'); // não existe nesse HTML, mas seguro
+
+    // Abrir modal ao clicar no botão principal
+    if (downloadBtn) {
+        downloadBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            modal.style.display = 'flex';
+        });
+    }
+
+    // Link de download confirmado
+    if (confirmDownload) {
+        confirmDownload.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (DOWNLOAD_URL && DOWNLOAD_URL !== '#') {
+                // Método mais eficaz para forçar download (cria um link temporário)
+                const link = document.createElement('a');
+                link.href = DOWNLOAD_URL;
+                link.download = ''; // indica que queremos baixar, não navegar
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                alert('Link de download em breve! O instalador será disponibilizado em breve.');
+            }
+            modal.style.display = 'none';
+        });
+    }
+
+    // Fechar modal
+    function closeModalFunc() {
+        modal.style.display = 'none';
+    }
+    
+    if (closeModal) {
+        closeModal.addEventListener('click', closeModalFunc);
+    }
+    
+    // Fechar modal clicando fora
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    // Scroll suave para os links do menu
+    document.querySelectorAll('.nav-links a').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
